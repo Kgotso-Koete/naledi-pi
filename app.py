@@ -9,12 +9,23 @@ Created on Saturday Jun  6 10:14:33 2020
 import picamera
 import tkinter as Tkinter
 import time
-from PIL import ImageTk, Image
+import PIL
+from PIL import ImageTk  
+from PIL import Image
 from threading import Thread
 from tkinter import ttk
 import io
 import sys
+import os
 
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_ROOT = os.path.join(BASE_DIR, "naledi-pi")
+IMAGES_ROOT = os.path.join(PROJECT_ROOT, "images")
+ASTROPHOTOGRAPHY_ROOT = os.path.join(IMAGES_ROOT, "astrophotography")
+JPG_IMAGES_ROOT = os.path.join(ASTROPHOTOGRAPHY_ROOT, "jpg")
+H264_VIDEOS_ROOT = os.path.join(ASTROPHOTOGRAPHY_ROOT, "h264")
+ 
 RQS_0=0
 RQS_QUIT=1
 RQS_CAPTURE=2
@@ -47,12 +58,12 @@ def camHandler():
     camera.vflip = False
     camera.crop = (0.0, 0.0, 1.0, 1.0)
     camera.resolution = (350, 300)
-    DynamicCaptureResolution = (4056,3040) #default camera resolution
+    DynamicCaptureResolution = (350, 300) #default camera resolution
     RecordingResolution = (1920,1080) #default recording resolution
     #recording default
     recording_duration = 0
     #end of set default
-    #camera.start_preview()
+    #camera.start_preview(fullscreen=False, window=(50,50,320,240))
 
     while rqs != RQS_QUIT:
         if rqs == RQS_CAPTURE:
@@ -67,13 +78,13 @@ def camHandler():
             camera.awb_gains = g
             if recording_duration==1:
               timeStamp = time.strftime("%Y%m%d-%H%M%S")
-              jpgFile='/home/pi/Pictures/Astrophotography/JPG/img_'+timeStamp+'.jpg'
+              jpgFile= JPG_IMAGES_ROOT + '/img_'+timeStamp+'.jpg'
               camera.capture(jpgFile,bayer=True)
               labelCapVal.set('Picture taken!')
             else:
                 camera.start_preview()
                 timeStamp = time.strftime("%Y%m%d-%H%M%S")
-                camera.capture_sequence(['/home/pi/Pictures/Astrophotography/JPG/img_'+timeStamp+'seq_%04d.jpg' % i for i in range(recording_duration)], bayer=True)                
+                camera.capture_sequence(['/home/kgotso-koete/Desktop/Hubble-Pi/Images/Astrophotography/JPG/img_'+timeStamp+'seq_%04d.jpg' % i for i in range(recording_duration)], bayer=True)                
                 camera.stop_preview()
                 labelCapVal.set('Picture Row taken!')
             camera.exposure_mode = 'auto'
@@ -84,7 +95,7 @@ def camHandler():
             print("Record")
             rqs=RQS_0
             timeStamp = time.strftime("%Y%m%d-%H%M%S")
-            h264File='/home/pi/Pictures/Astrophotography/H264/recording_'+timeStamp+'.h264'
+            h264File= H264_VIDEOS_ROOT + '/recording_'+timeStamp+'.h264'
             camera.resolution = RecordingResolution
             camera.framerate = 30
             camera.start_preview()
@@ -97,7 +108,7 @@ def camHandler():
         else:
             #set parameter
             #camera.shutter_speed = camera.exposure_speed
-            DynamicCaptureResolution = (int(4056/scaleBinning.get()),int(3040/scaleBinning.get()))
+            DynamicCaptureResolution = (int(3280/scaleBinning.get()),int(2464/scaleBinning.get()))
             if var_mono.get() == 1:
                 camera.color_effects = (128,128)
             else:

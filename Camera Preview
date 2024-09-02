@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=PreviewCam
+Exec=raspistill -t 60000
+Terminal=true
+Type=Application
+Icon=/home/kgotso-koete/Desktop/naledi-pi/desktop_config/Video.png
