@@ -55,8 +55,8 @@ def camHandler():
     camera.exposure_compensation = 0
     camera.image_effect = 'none'
     camera.color_effects = None
-    camera.rotation = 270
-    camera.hflip = False
+    camera.rotation = 0
+    camera.hflip = True
     camera.vflip = False
     camera.crop = (0.0, 0.0, 1.0, 1.0)
     camera.resolution = (350, 300)
