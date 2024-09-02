@@ -32,6 +32,8 @@ RQS_CAPTURE=2
 RQS_RECORD=3
 rqs=RQS_0
 
+tkTop = Tkinter.Tk()
+
 def camHandler():
     global rqs
     rqs = RQS_0
@@ -124,7 +126,9 @@ def camHandler():
             stream.seek(0)
             tmpImage = Image.open(stream)
             tmpImg = ImageTk.PhotoImage(tmpImage)
-            previewPanel.configure(image = tmpImg)
+            previewPanel.configure(image=tmpImg)
+            previewPanel.image = tmpImg
+            
             #sleep(0.5)
                 
     print("Quit")        
@@ -151,7 +155,7 @@ def record():
     rqs = RQS_RECORD
     labelCapVal.set("Recording")
 
-tkTop = Tkinter.Tk()
+
 tkTop.wm_title("Settings")
 tkTop.geometry("130x300+350+0")
 
@@ -267,4 +271,4 @@ checkboxMonochrome.pack(side="left")
 print("Start")
 startCamHandler()
 
-Tkinter.mainloop()
+tkTop.mainloop()
