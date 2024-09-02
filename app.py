@@ -84,7 +84,7 @@ def camHandler():
             else:
                 camera.start_preview()
                 timeStamp = time.strftime("%Y%m%d-%H%M%S")
-                camera.capture_sequence(['/home/kgotso-koete/Desktop/Hubble-Pi/Images/Astrophotography/JPG/img_'+timeStamp+'seq_%04d.jpg' % i for i in range(recording_duration)], bayer=True)                
+                camera.capture_sequence([JPG_IMAGES_ROOT + '/img_'+timeStamp+'seq_%04d.jpg' % i for i in range(recording_duration)], bayer=True)                
                 camera.stop_preview()
                 labelCapVal.set('Picture Row taken!')
             camera.exposure_mode = 'auto'
