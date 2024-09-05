@@ -26,6 +26,22 @@ ASTROPHOTOGRAPHY_ROOT = os.path.join(IMAGES_ROOT, "astrophotography")
 JPG_IMAGES_ROOT = os.path.join(ASTROPHOTOGRAPHY_ROOT, "jpg")
 H264_VIDEOS_ROOT = os.path.join(ASTROPHOTOGRAPHY_ROOT, "h264")
  
+# resolution and other camera config values
+RESOLUTION_STARTING_WIDTH = 350
+RESOLUTION_STARTING_HEIGHT = 300
+RESOLUTION_RECORDING_WIDTH = 1920
+RESOLUTION_RECORDING_HEIGHT = 1080
+RESOLUTION_CAPTURE_WIDTH_HQ = 4056
+RESOLUTION_CAPTURE_HEIGHT_HQ = 3040
+RESOLUTION_CAPTURE_WIDTH_CAMV2 = 3280
+RESOLUTION_CAPTURE_HEIGHT_CAMV2 = 2464
+RESOLUTION_CAPTURE_WIDTH = RESOLUTION_CAPTURE_WIDTH_CAMV2
+RESOLUTION_CAPTURE_HEIGHT = RESOLUTION_CAPTURE_HEIGHT_CAMV2
+FRAME_RATE = 30
+ROTATION = 0
+BRIGHTNESS = 50
+
+# other config
 RQS_0=0
 RQS_QUIT=1
 RQS_CAPTURE=2
@@ -44,7 +60,7 @@ def camHandler():
     #set default
     camera.sharpness = 0
     camera.contrast = 0
-    camera.brightness = 50
+    camera.brightness = BRIGHTNESS
     camera.saturation = 0
     camera.ISO = 0
     camera.video_stabilization = False
@@ -55,13 +71,13 @@ def camHandler():
     camera.exposure_compensation = 0
     camera.image_effect = 'none'
     camera.color_effects = None
-    camera.rotation = 0
+    camera.rotation = ROTATION
     camera.hflip = True
     camera.vflip = False
     camera.crop = (0.0, 0.0, 1.0, 1.0)
-    camera.resolution = (350, 300)
-    DynamicCaptureResolution = (350, 300) #default camera resolution
-    RecordingResolution = (1920,1080) #default recording resolution
+    camera.resolution = (RESOLUTION_STARTING_WIDTH, RESOLUTION_STARTING_HEIGHT)
+    DynamicCaptureResolution = (RESOLUTION_CAPTURE_WIDTH, RESOLUTION_CAPTURE_HEIGHT) #default camera resolution
+    RecordingResolution = (RESOLUTION_RECORDING_WIDTH,RESOLUTION_RECORDING_HEIGHT) #default recording resolution
     #recording default
     recording_duration = 0
     #end of set default
@@ -92,25 +108,25 @@ def camHandler():
             camera.exposure_mode = 'auto'
             camera.awb_mode = 'auto'
             camera.shutter_speed = camera.exposure_speed
-            camera.resolution = (350, 300)      #resume preview size
+            camera.resolution = (RESOLUTION_STARTING_WIDTH, RESOLUTION_STARTING_HEIGHT)      #resume preview size
         if rqs == RQS_RECORD:
             print("Record")
             rqs=RQS_0
             timeStamp = time.strftime("%Y%m%d-%H%M%S")
             h264File= H264_VIDEOS_ROOT + '/recording_'+timeStamp+'.h264'
             camera.resolution = RecordingResolution
-            camera.framerate = 30
+            camera.framerate = FRAME_RATE
             camera.start_preview()
             camera.start_recording(h264File)
             camera.wait_recording(recording_duration)
             camera.stop_recording()
             camera.stop_preview()
-            camera.resolution = (350, 300)      #resume preview size
+            camera.resolution = (RESOLUTION_STARTING_WIDTH, RESOLUTION_STARTING_HEIGHT)      #resume preview size
             labelCapVal.set('Recording done!')
         else:
             #set parameter
             #camera.shutter_speed = camera.exposure_speed
-            DynamicCaptureResolution = (int(3280/scaleBinning.get()),int(2464/scaleBinning.get()))
+            DynamicCaptureResolution = (int(RESOLUTION_CAPTURE_WIDTH/scaleBinning.get()),int(RESOLUTION_CAPTURE_HEIGHT/scaleBinning.get()))
             if var_mono.get() == 1:
                 camera.color_effects = (128,128)
             else:
@@ -181,7 +197,7 @@ tkButtonRecord = Tkinter.Button(
     tkTop, text="Record", command=record)
 tkButtonRecord.pack(padx=0, pady=0, side=Tkinter.TOP)
 
-SCALE_WIDTH = 130;
+SCALE_WIDTH = 130
 SCALE_LENGHT = 250
 labelCapVal = Tkinter.StringVar()
 Tkinter.Label(tkTop, textvariable=labelCapVal).pack()

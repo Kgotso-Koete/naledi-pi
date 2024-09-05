@@ -1,9 +1,0 @@
-[Desktop Entry]
-Version=1.0
-Name=NalediCam
-Exec=python3 app.py
-Path=/home/kgotso-koete/Desktop/naledi-pi/
-Terminal=true
-Type=Application
-Icon=/home/kgotso-koete/Desktop/naledi-pi/desktop_config/Camera.png
-Categories=Utility;Application;
